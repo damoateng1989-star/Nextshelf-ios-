@@ -1,0 +1,75 @@
+# NextShelf iOS — Codemagic workflow (TestFlight)
+#
+# Prereqs, all done in the Codemagic / Apple UIs, not in this file:
+#  1. App Store Connect: create the app record first (My Apps → New App,
+#     bundle id com.nextshelf.app) and create an API key with the Admin role.
+#     Keep the Key ID, Issuer ID and the .p8 file (shown once).
+#  2. Codemagic: Team Settings → Integrations → Developer Portal → add that
+#     API key and name the integration EXACTLY:
+#     nextshelf-app-store-connect
+#     (this file references that name; a different name breaks the build).
+#  3. Optional but recommended: copy the app's Apple ID (App Store Connect →
+#     the app → App Information → "Apple ID", a number like 6740000000) into
+#     APP_STORE_APPLE_ID below. With it, build numbers continue from whatever
+#     App Store Connect already has; without it they follow Codemagic's own
+#     build counter (also unique, starting at 1).
+#  4. Codemagic app page → "Check for configuration files" → this workflow
+#     appears → Start build.
+#
+# Signing is automatic: `xcode-project use-profiles` fetches/creates the
+# distribution certificate and provisioning profile through the API key,
+# and the publishing step uploads the IPA and submits it to TestFlight.
+# No secrets in this file — the key lives in the Codemagic integration.
+
+workflows:
+  ios-testflight:
+    name: iOS TestFlight
+    instance_type: mac_mini_m2
+    max_build_duration: 60
+    integrations:
+      app_store_connect: nextshelf-app-store-connect
+    environment:
+      ios_signing:
+        distribution_type: app_store
+        bundle_identifier: com.nextshelf.app
+      vars:
+        XCODE_PROJECT: NextShelf.xcodeproj
+        XCODE_SCHEME: NextShelf
+        BUNDLE_ID: com.nextshelf.app
+        APP_STORE_APPLE_ID: ""        # the app's numeric Apple ID (see step 3); leave empty to use Codemagic's counter
+      xcode: latest
+    triggering:
+      events:
+        - push
+      branch_patterns:
+        - pattern: main
+          include: true
+    scripts:
+      - name: Set up code signing
+        script: |
+          xcode-project use-profiles
+      - name: Bump build number
+        script: |
+          # App Store Connect rejects a build number it has already seen.
+          # `get-latest-app-store-build-number` needs the app's numeric Apple ID
+          # (a bundle id doesn't work), so use it when it's set; otherwise fall
+          # back to Codemagic's own build counter, which goes up every build.
+          if [ -n "$APP_STORE_APPLE_ID" ]; then
+            LATEST=$(app-store-connect get-latest-app-store-build-number "$APP_STORE_APPLE_ID" 2>/dev/null || echo 0)
+            NEXT=$((LATEST + 1))
+            if [ "$NEXT" -le "${BUILD_NUMBER:-0}" ]; then NEXT=$BUILD_NUMBER; fi
+          else
+            NEXT=${BUILD_NUMBER:-1}
+          fi
+          echo "Build number: $NEXT"
+          agvtool new-version -all "$NEXT"
+      - name: Build IPA for distribution
+        script: |
+          xcode-project build-ipa --project "$XCODE_PROJECT" --scheme "$XCODE_SCHEME"
+    artifacts:
+      - build/ios/ipa/*.ipa
+      - /tmp/xcodebuild_logs/*.log
+    publishing:
+      app_store_connect:
+        auth: integration
+        submit_to_testflight: true

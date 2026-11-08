@@ -355,6 +355,7 @@ target_common = {
     "ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS": "YES",
     "CODE_SIGN_STYLE": "Automatic",
     "CURRENT_PROJECT_VERSION": "1",
+    "VERSIONING_SYSTEM": "apple-generic",   # agvtool (CI build-number bump) needs this
     "ENABLE_PREVIEWS": "YES",
     "GENERATE_INFOPLIST_FILE": "NO",
     "INFOPLIST_FILE": "NextShelf/Info.plist",
