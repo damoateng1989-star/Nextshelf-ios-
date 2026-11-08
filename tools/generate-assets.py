@@ -70,11 +70,16 @@ def write_json(path, data):
 def gen_appicon():
     d = ASSETS / "AppIcon.appiconset"
     d.mkdir(parents=True, exist_ok=True)
-    master = Image.open(LOGO_DIR / "logo-app-icon.png").convert("RGBA")
+    master = Image.open(LOGO_DIR / "logo-app-icon-white.png").convert("RGBA")
+    # App Store rule: no alpha in app icons. Flatten onto the tile colour, sampled from an
+    # opaque pixel on the tile's top edge (iOS rounds the corners itself).
+    fill = master.getpixel((master.width // 2, 16))[:3]
+    flat = Image.new("RGB", master.size, fill)
+    flat.paste(master, mask=master.getchannel("A"))
     images = []
     for idiom, size, scale, filename in ICON_SIZES:
         px = int(size * scale)
-        master.resize((px, px), Image.LANCZOS).save(d / filename)
+        flat.resize((px, px), Image.LANCZOS).save(d / filename)
         images.append({
             "filename": filename,
             "idiom": idiom,
@@ -103,7 +108,7 @@ def gen_images():
     # AppIconTile: the 1024 mark, used as the auth hero tile.
     d = ASSETS / "AppIconTile.imageset"
     d.mkdir(parents=True, exist_ok=True)
-    shutil.copy(LOGO_DIR / "logo-app-icon.png", d / "tile.png")
+    shutil.copy(LOGO_DIR / "logo-app-icon-white.png", d / "tile.png")
     write_json(d / "Contents.json", {
         "images": [{"filename": "tile.png", "idiom": "universal", "scale": "1x"}],
         "info": {"author": "xcode", "version": 1},
