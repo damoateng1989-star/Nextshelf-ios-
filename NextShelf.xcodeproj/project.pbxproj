@@ -22,6 +22,7 @@
 		A1108893AF73806756189DB3 /* TickerWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63199D328308B6C283F49EAA /* TickerWebView.swift */; };
 		DDD09E12BC6D0466D136B4F7 /* RecordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AAA1268E5411509E096F751 /* RecordView.swift */; };
 		D35976A891790EF4139F9749 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF12A1827EDB2FEE2B05F5FC /* RootView.swift */; };
+		7E1BC7D4F4C350698CF5DA42 /* SitePageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C7DAAC9D3FCDF9C6D3FE38A /* SitePageView.swift */; };
 		383B1BB29D9AAC5977792EFC /* WatchlistView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67C6D52B814A1B551CBCDEC4 /* WatchlistView.swift */; };
 		A807E4691D55B1F8EADD7FA6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F45D3DB0A3A2547FD58C04E8 /* Assets.xcassets */; };
 		CFC6E1E8A7B95505BEA833C3 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 661FE32FAB1C969A69AD2AD5 /* WebKit.framework */; };
@@ -43,6 +44,7 @@
 		63199D328308B6C283F49EAA /* TickerWebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TickerWebView.swift; sourceTree = "<group>"; };
 		9AAA1268E5411509E096F751 /* RecordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordView.swift; sourceTree = "<group>"; };
 		DF12A1827EDB2FEE2B05F5FC /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
+		5C7DAAC9D3FCDF9C6D3FE38A /* SitePageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SitePageView.swift; sourceTree = "<group>"; };
 		67C6D52B814A1B551CBCDEC4 /* WatchlistView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchlistView.swift; sourceTree = "<group>"; };
 		2C4E4A5D880C7C528F184160 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F45D3DB0A3A2547FD58C04E8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -122,6 +124,7 @@
 			isa = PBXGroup;
 			children = (
 				DF12A1827EDB2FEE2B05F5FC /* RootView.swift */,
+				5C7DAAC9D3FCDF9C6D3FE38A /* SitePageView.swift */,
 				CCFA352D67CD45267E156A6A /* Auth */,
 				07572D1756A533E7BA8D9B3F /* Board */,
 				BD6726873EFAAED32D856CF5 /* Watchlist */,
@@ -273,6 +276,7 @@
 				A1108893AF73806756189DB3 /* TickerWebView.swift in Sources */,
 				DDD09E12BC6D0466D136B4F7 /* RecordView.swift in Sources */,
 				D35976A891790EF4139F9749 /* RootView.swift in Sources */,
+				7E1BC7D4F4C350698CF5DA42 /* SitePageView.swift in Sources */,
 				383B1BB29D9AAC5977792EFC /* WatchlistView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -348,7 +352,7 @@
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				VERSIONING_SYSTEM = "apple-generic";
+				VERSIONING_SYSTEM = apple-generic;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = NextShelf/Info.plist;
@@ -385,7 +389,7 @@
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				VERSIONING_SYSTEM = "apple-generic";
+				VERSIONING_SYSTEM = apple-generic;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = NextShelf/Info.plist;

@@ -173,11 +173,33 @@ struct BoardRow: Decodable, Identifiable {
     /// Non-hub setups on this symbol (present on /api/tickers status,
     /// stripped from /api/board hub rows).
     var setups: [SetupRow]?
+    /// Patch 198 §6 (Nov 22): the live clear-path fact, on live hub rows only.
+    var path: PathFact?
+    /// Patch 182: the stored options-tape classification of this hub's break
+    /// (live hub rows, only for viewers the server's flow gate allows).
+    var tapeFlow: TapeFlow?
 
     var id: String { symbol ?? UUID().uuidString }
 
     var isBreakout: Bool { state == "breakout_up" || state == "breakdown" }
     var isShort: Bool { state == "breakdown" || direction == "down" }
+}
+
+/// {"clear": true, "blocking": [prices]} — the road to the target right now
+/// (price levels plus gamma). A live fact; the grade's reading is taken at
+/// the retest.
+struct PathFact: Decodable {
+    var clear: Bool?
+    var blocking: [Double]?
+}
+
+/// {"state": "confirmed", "net": dollars, "line": "...", "date": "YYYY-MM-DD"}.
+/// A past fact about the hub's break, never a forecast.
+struct TapeFlow: Decodable {
+    var state: String?
+    var net: Double?
+    var line: String?
+    var date: String?
 }
 
 struct Hub: Decodable {

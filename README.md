@@ -174,3 +174,31 @@ App Store Connect API key for signing, TestFlight to himself first.
 - No Pro purchase in-app; Pro upsell links out to the web.
 - The regime filter is server-side; the client displays it, never
   computes it.
+
+## Nov 22 2026 — hybrid update (Today, Cinema, Learn from the site)
+
+The web app moved far ahead of this v1 (Today, Cinema, Learn, the A+ grade,
+Clear path and tape chips, the chart panel). Rather than re-port every web
+change, the app is now a **hybrid**:
+
+- **From the live site** (`Views/SitePageView.swift`): **Today** (`/app#today`),
+  **Cinema** (`/app#cinema`), **Learn** and **Glossary** (`/learn`,
+  `/learn/glossary`). Loaded with `?embed=ios`, which makes the site hide its
+  own top bar, sidebar and bottom tabs (hub-scanner commit `887ed70`). Same
+  cookie hand-off as `TickerWebView`; films play inline; NextShelf links stay
+  in the app, other sites open in Safari; pull to refresh + a reload button.
+  Every web change shows up here with no new build.
+- **Native, updated**: Setups rows show the **Clear path** and **Tape
+  confirmed** chips (`BoardRow.path`, `BoardRow.tapeFlow`, both already on
+  `/api/board`); the shelf card shows the Clear path chip and the tape fact,
+  labelled with the hub break it belongs to.
+- **Tabs**: Today · Setups · Watchlist · Cinema · More (Learn, Glossary,
+  Record, Alerts & account). Our own More list, not the system one (which
+  doubles the navigation bar around a NavigationStack).
+
+Grades decode as `String`, so the new "A+" needs no model change.
+
+Still NOT compiled here (no Xcode on Linux, swift.org blocked): the first
+Codemagic build is the compiler. App Review note: three tabs are web
+content; the native Setups / Watchlist / Record / Alerts screens are what
+keep this clear of the "just a website" rule (4.2).

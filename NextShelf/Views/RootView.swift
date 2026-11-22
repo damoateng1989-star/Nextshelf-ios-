@@ -25,7 +25,17 @@ struct MainTabView: View {
     @EnvironmentObject private var session: SessionStore
 
     var body: some View {
+        // Nov 22 2026 (hybrid): Today, Cinema and Learn come from the live
+        // site (SitePageView), so web changes reach the app without a new
+        // build; Setups, Watchlist, Record and Alerts stay native. Five tabs:
+        // our own More list (not the system one, which doubles the
+        // navigation bar around a NavigationStack) holds Learn, Record, Alerts.
         TabView {
+            NavigationStack {
+                SitePageView(title: "Today", path: "/app#today")
+            }
+            .tabItem { Label("Today", systemImage: "house") }
+
             NavigationStack {
                 BoardView()
             }
@@ -37,15 +47,44 @@ struct MainTabView: View {
             .tabItem { Label("Watchlist", systemImage: "star") }
 
             NavigationStack {
-                RecordView()
+                SitePageView(title: "Cinema", path: "/app#cinema")
             }
-            .tabItem { Label("Record", systemImage: "chart.bar") }
+            .tabItem { Label("Cinema", systemImage: "film") }
 
             NavigationStack {
-                AlertsSettingsView()
+                MoreView()
             }
-            .tabItem { Label("Alerts", systemImage: "bell") }
+            .tabItem { Label("More", systemImage: "ellipsis.circle") }
         }
         .tint(NSColor.blue)
+    }
+}
+
+/// The fifth tab: Learn (from the site), Record and Alerts (native).
+struct MoreView: View {
+    var body: some View {
+        List {
+            NavigationLink {
+                SitePageView(title: "Learn", path: "/learn")
+            } label: {
+                Label("Learn", systemImage: "graduationcap")
+            }
+            NavigationLink {
+                SitePageView(title: "Glossary", path: "/learn/glossary")
+            } label: {
+                Label("Glossary", systemImage: "character.book.closed")
+            }
+            NavigationLink {
+                RecordView()
+            } label: {
+                Label("Record", systemImage: "chart.bar")
+            }
+            NavigationLink {
+                AlertsSettingsView()
+            } label: {
+                Label("Alerts & account", systemImage: "bell")
+            }
+        }
+        .navigationTitle("More")
     }
 }

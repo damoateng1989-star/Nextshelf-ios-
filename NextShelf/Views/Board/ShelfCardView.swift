@@ -54,6 +54,7 @@ struct ShelfCardView: View {
                             .foregroundStyle(NSColor.down)
                     }
                     chartSection
+                    tapeSection
                     hubSection
                     triggersSection
                     gammaSection
@@ -149,6 +150,9 @@ struct ShelfCardView: View {
                 StateBadge(text: kind.uppercased(), tone: .blue)
             }
             GradeBadge(grade: status?.hub?.grade, score: status?.hub?.score)
+            if row?.path?.clear == true {
+                StateBadge(text: "CLEAR PATH", tone: .blue)
+            }
             if let earnings, let days = earnings.days, days <= 7 {
                 StateBadge(text: "EARNINGS · \(days)D", tone: .amber)
             }
@@ -176,6 +180,54 @@ struct ShelfCardView: View {
     }
 
     // MARK: - Hub
+
+    /// Patch 182 + Nov 22: the options-tape fact about this stock's HUB break,
+    /// labelled with the break it belongs to so it can't be read as being
+    /// about another setup on the same card.
+    @ViewBuilder
+    private var tapeSection: some View {
+        if let tape = row?.tapeFlow, let line = tape.line, !line.isEmpty {
+            let up = row?.state != "breakdown"
+            let what = up ? "breakout" : "breakdown"
+            let edge = up ? row?.hub?.high : row?.hub?.low
+            let label = Self.tapeLabel(what: what, edge: edge, date: tape.date)
+            NSCard {
+                VStack(alignment: .leading, spacing: 6) {
+                    Text(label)
+                        .font(.system(size: 11, weight: .800))
+                        .foregroundStyle(NSColor.muted)
+                    Text(line.replacingOccurrences(of: "confirmed this \(what)", with: "confirmed the hub \(what)"))
+                        .font(.system(size: 14, weight: .600))
+                        .foregroundStyle(NSColor.blue)
+                    Text("From the options tape, measured at the break. A past fact, not a live reading.")
+                        .font(.system(size: 12))
+                        .foregroundStyle(NSColor.muted)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+            }
+        }
+    }
+
+    /// "ABOUT THE HUB BREAKOUT THROUGH $109.22 · THU, NOV 19"
+    private static func tapeLabel(what: String, edge: Double?, date: String?) -> String {
+        var text: String = "About the hub " + what
+        if let edge { text += " through " + edge.price }
+        if let when = shortDate(date) { text += " · " + when }
+        return text.uppercased()
+    }
+
+    /// "2026-11-19" → "Thu, Nov 19"
+    private static func shortDate(_ iso: String?) -> String? {
+        guard let iso else { return nil }
+        let parse = DateFormatter()
+        parse.locale = Locale(identifier: "en_US_POSIX")
+        parse.dateFormat = "yyyy-MM-dd"
+        guard let date = parse.date(from: iso) else { return nil }
+        let show = DateFormatter()
+        show.locale = Locale(identifier: "en_US")
+        show.dateFormat = "EEE, MMM d"
+        return show.string(from: date)
+    }
 
     private var hubSection: some View {
         Group {

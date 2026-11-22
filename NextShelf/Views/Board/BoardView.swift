@@ -280,6 +280,17 @@ struct BoardRowView: View {
                 Text(subtitle)
                     .font(.system(size: 12))
                     .foregroundStyle(NSColor.muted)
+                if row.path?.clear == true || row.tapeFlow?.line != nil {
+                    // Fact tags, blue like the web board (green stays for direction).
+                    HStack(spacing: 6) {
+                        if row.path?.clear == true {
+                            StateBadge(text: "CLEAR PATH", tone: .blue)
+                        }
+                        if row.tapeFlow?.line != nil {
+                            StateBadge(text: "TAPE CONFIRMED", tone: .blue)
+                        }
+                    }
+                }
             }
             Spacer()
             VStack(alignment: .trailing, spacing: 3) {
