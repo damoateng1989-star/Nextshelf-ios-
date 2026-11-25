@@ -271,6 +271,7 @@ struct BoardRowView: View {
 
     var body: some View {
         HStack(spacing: 10) {
+            TickerLogo(symbol: row.symbol ?? "")
             VStack(alignment: .leading, spacing: 3) {
                 HStack(spacing: 6) {
                     Text(row.symbol ?? "—")
@@ -323,8 +324,10 @@ struct BoardRowView: View {
         switch row.state {
         case "breakout_up":
             StateBadge(text: "BREAKOUT ↑", tone: .up)
+            SideTag(isShort: false)
         case "breakdown":
-            StateBadge(text: "SHORT ↓", tone: .down)
+            StateBadge(text: "BREAKDOWN ↓", tone: .down)
+            SideTag(isShort: true)
         case "forming":
             if row.nearEdge != nil {
                 StateBadge(text: "AT EDGE", tone: .blue)
@@ -390,8 +393,12 @@ struct SetupRowView: View {
     @ViewBuilder
     private var setupBadge: some View {
         switch setup.state {
-        case "breakout_up": StateBadge(text: "BREAKOUT ↑", tone: .up)
-        case "breakdown": StateBadge(text: "BREAKDOWN ↓", tone: .down)
+        case "breakout_up":
+            StateBadge(text: "BREAKOUT ↑", tone: .up)
+            SideTag(isShort: false)
+        case "breakdown":
+            StateBadge(text: "BREAKDOWN ↓", tone: .down)
+            SideTag(isShort: true)
         case "testing": StateBadge(text: "TESTING", tone: .blue)
         case "forming": StateBadge(text: "FORMING", tone: .neutral)
         default: EmptyView()
@@ -409,6 +416,7 @@ struct FlowChips: View {
             ForEach(rows) { row in
                 NavigationLink { ShelfCardView(symbol: row.symbol ?? "", row: row) } label: {
                     HStack(spacing: 4) {
+                        TickerLogo(symbol: row.symbol ?? "", size: 16)
                         Text(row.symbol ?? "—").font(.system(size: 12, weight: .700))
                         Text("· \(row.hub?.sessions ?? 0) sess")
                             .font(.system(size: 12))

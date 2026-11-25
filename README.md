@@ -202,3 +202,13 @@ Still NOT compiled here (no Xcode on Linux, swift.org blocked): the first
 Codemagic build is the compiler. App Review note: three tabs are web
 content; the native Setups / Watchlist / Record / Alerts screens are what
 keep this clear of the "just a website" rule (4.2).
+
+## Nov 25 2026 — logos + the side tag
+
+The web pages inside the app (Today, Cinema, Learn, and the chart's ticker page) update by themselves:
+the compact Today, A-only hero, cross setups, the 30M chart view and the LIVE fix are already there.
+Native changes in this update:
+- **Company logos** (`TickerLogo`, same source and grey tile as the web, two-letter fallback) on Setups rows,
+  the hub chips, the Shelf card header and Watchlist rows.
+- **The side, named up front** (`SideTag`): LONG · CALLS / SHORT · PUTS on breakouts and breakdowns
+  (Setups rows, setup rows, Shelf card), matching the alerts. The breakdown badge now reads BREAKDOWN ↓.

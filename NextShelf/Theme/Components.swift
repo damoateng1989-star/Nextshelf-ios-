@@ -254,3 +254,47 @@ extension View {
         }
     }
 }
+
+/// Company logo tile (web Patch 221, Nov 2026): the logo on a soft grey tile, with the
+/// ticker's first two letters as the fallback while it loads or when there is none.
+struct TickerLogo: View {
+    let symbol: String
+    var size: CGFloat = 26
+
+    private var letters: String {
+        String(symbol.uppercased().filter { $0.isLetter || $0.isNumber }.prefix(2))
+    }
+
+    private var url: URL? {
+        let s = symbol.uppercased().addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? symbol
+        return URL(string: "https://financialmodelingprep.com/image-stock/\(s).png")
+    }
+
+    var body: some View {
+        ZStack {
+            RoundedRectangle(cornerRadius: size * 0.26, style: .continuous)
+                .fill(Color(red: 0.914, green: 0.925, blue: 0.945))       // #E9ECF1, same as the web tile
+            AsyncImage(url: url) { phase in
+                if let image = phase.image {
+                    image.resizable().scaledToFit().padding(size * 0.12)
+                } else {
+                    Text(letters)
+                        .font(.system(size: size * 0.38, weight: .bold))
+                        .foregroundStyle(Color(red: 0.35, green: 0.38, blue: 0.43))
+                }
+            }
+        }
+        .frame(width: size, height: size)
+        .clipShape(RoundedRectangle(cornerRadius: size * 0.26, style: .continuous))
+        .accessibilityHidden(true)
+    }
+}
+
+/// The side, named up front (Nov 25 2026, same as the alerts): LONG · CALLS or SHORT · PUTS.
+struct SideTag: View {
+    let isShort: Bool
+
+    var body: some View {
+        StateBadge(text: isShort ? "SHORT · PUTS" : "LONG · CALLS", tone: isShort ? .down : .up)
+    }
+}

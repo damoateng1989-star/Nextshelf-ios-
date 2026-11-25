@@ -112,12 +112,18 @@ struct ShelfCardView: View {
 
     private var header: some View {
         HStack(alignment: .bottom) {
+            TickerLogo(symbol: symbol, size: 40)
             VStack(alignment: .leading, spacing: 2) {
                 Text(symbol)
                     .font(.system(size: 26, weight: .800))
-                Text(exchangeLine)
-                    .font(.system(size: 12))
-                    .foregroundStyle(NSColor.muted)
+                HStack(spacing: 6) {
+                    Text(exchangeLine)
+                        .font(.system(size: 12))
+                        .foregroundStyle(NSColor.muted)
+                    if status?.state == "breakout_up" || status?.state == "breakdown" {
+                        SideTag(isShort: status?.isShort == true)
+                    }
+                }
             }
             Spacer()
             VStack(alignment: .trailing, spacing: 2) {

@@ -148,6 +148,7 @@ struct WatchlistRow: View {
 
     var body: some View {
         HStack(spacing: 10) {
+            TickerLogo(symbol: item.symbol)
             VStack(alignment: .leading, spacing: 3) {
                 HStack(spacing: 6) {
                     Text(item.symbol).font(.system(size: 15, weight: .800))
